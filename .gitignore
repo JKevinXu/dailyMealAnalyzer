@@ -1,0 +1,22 @@
+# Xcode
+build/
+DerivedData/
+*.xcuserstate
+*.xcuserdatad/
+xcuserdata/
+*.xcworkspace/xcuserdata/
+
+# Swift Package Manager
+.build/
+Packages/
+
+# Python venv
+.venv/
+
+# Core ML model (large binary, regenerate with scripts/create_food_model.py)
+MealAnalyzer/Food101.mlpackage/
+
+# macOS
+.DS_Store
+*.swp
+*~

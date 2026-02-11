@@ -30,7 +30,7 @@ struct AnalyzeView: View {
 
                     // Analysis progress
                     if isAnalyzing {
-                        ProgressView("Analyzing your meal...")
+                        ProgressView("Analyzing with GPT-4o…")
                             .padding()
                     }
 
@@ -224,26 +224,7 @@ struct AnalyzeView: View {
 
         Task {
             do {
-                let results = try await FoodClassifier.shared.classify(image: image)
-
-                if results.isEmpty {
-                    errorMessage = "No food items detected. Try a clearer photo."
-                    isAnalyzing = false
-                    return
-                }
-
-                if let match = NutrientDatabase.shared.bestMatch(for: results) {
-                    analysisResult = AnalysisResult(
-                        foodName: match.food.name,
-                        servingSize: match.food.servingSize,
-                        nutrients: match.food.nutrients,
-                        confidence: Double(match.confidence)
-                    )
-                } else {
-                    // Show best classification even without nutrient data
-                    let best = results[0]
-                    errorMessage = "Detected \"\(best.identifier)\" but no nutrient data available. Try a different food."
-                }
+                analysisResult = try await LLMFoodClassifier.shared.analyze(image: image)
             } catch {
                 errorMessage = error.localizedDescription
             }
@@ -287,15 +268,6 @@ struct AnalyzeView: View {
         analysisResult = nil
         errorMessage = nil
     }
-}
-
-// MARK: - Analysis Result
-
-private struct AnalysisResult {
-    let foodName: String
-    let servingSize: String
-    let nutrients: NutrientInfo
-    let confidence: Double
 }
 
 #Preview {

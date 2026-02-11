@@ -16,13 +16,10 @@ struct NutrientInfo: Codable, Equatable {
     static let zero = NutrientInfo(calories: 0, protein: 0, carbs: 0, fat: 0, fiber: 0, sugar: 0)
 }
 
-struct FoodItem: Codable {
-    let name: String
+/// Unified result returned by the LLM analysis.
+struct AnalysisResult {
+    let foodName: String
     let servingSize: String
     let nutrients: NutrientInfo
-}
-
-struct ClassificationResult {
-    let identifier: String
-    let confidence: Float
+    let confidence: Double
 }
